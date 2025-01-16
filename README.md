@@ -8,7 +8,6 @@ AWS Account
 Passion to Learn
 Master & Worker Node:
 Run the following commands on both the master and worker nodes to prepare them for kubeadm.
-
  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 
  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
@@ -73,38 +72,3 @@ sudo apt-get install -y jq
 
 sudo systemctl enable --now kubelet
 sudo systemctl start kubelet
-Master Node (Only):
-a) Initialize the Kubernetes master node.
-
- sudo kubeadm config images pull
-
- sudo kubeadm init
-
- mkdir -p "$HOME"/.kube
- sudo cp -i /etc/kubernetes/admin.conf "$HOME"/.kube/config
- sudo chown "$(id -u)":"$(id -g)" "$HOME"/.kube/config
-
- # Network Plugin = calico
- kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/calico.yaml
-After succesfully running, your Kubernetes control plane will be initialized successfully.
-
-b) Generate a token for worker nodes to join:
-
- kubeadm token create --print-join-command
-c) Expose port 6443 in the Security group for the Worker to connect to Master Node
-
-Worker Node (Only):
-a) Run the following commands on the worker node.
-
-sudo kubeadm reset pre-flight checks
-b) Paste the join command you got from the master node and append --v=5 at the end. Make sure either you are working as sudo user or usesudo before the command
-
-Verify if it is working as expected!
-
-kubectl get nodes
-Link to the video tutorial:
-
-Follow our tutorials here: https://www.youtube.com/@amonkincloud/videos
-Follow my personal blog here: https://dev.to/yeshwanthlm/
-Follow us on Instagram: https://www.instagram.com/amonkincloud/
-For queries write to us at: amonkincloud@gmail.com
